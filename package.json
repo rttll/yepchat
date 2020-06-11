@@ -27,6 +27,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "pusher-js": "^6.0.3",
     "vue": "^2.6.11"
   }
 }
