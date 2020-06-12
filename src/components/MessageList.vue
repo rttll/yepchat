@@ -2,7 +2,7 @@
 
   <div class="" ref="list">
     <div v-for="(message, index) in list" :key="index" class="">
-      <div class="flex py-2" :class="message.user === user ? 'justify-end' : 'justify-start' ">
+      <div class="flex py-2" :class="message.fields.user === user ? 'justify-end' : 'justify-start' ">
         <Message :message="message" class="" />
       </div>
     </div>
@@ -35,7 +35,7 @@
       },
     },
     created() {
-      fetch('http://localhost:9000/messages').then((data) => {
+      fetch('http://localhost:9000/index').then((data) => {
         return data.json()
       }).then((messages) => {
         this.messages = messages

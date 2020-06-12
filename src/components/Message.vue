@@ -2,7 +2,7 @@
   <div class="relative w-1/2 md:w-1/3 lg:w-1/4">
     <div class="bg-blue-400 rounded-t-full">&nbsp;</div>
     <div class="bg-blue-400 px-8">
-      <p v-for="(part, index) in message.body.split('\n')">
+      <p v-for="(part, index) in message.fields.body.split('\n')">
         <span v-if="part === '' ">&nbsp;</span>
         {{part}}
       </p>
