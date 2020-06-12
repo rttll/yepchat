@@ -14,6 +14,7 @@ module.exports = {
   },
   devServer: {
     contentBase: path.resolve(__dirname, 'dist'),
+    clientLogLevel: 'silent',
     hot: true
   },
   module: {

@@ -1,32 +1,50 @@
 <template>
-  <div id="app">
-    <div class="container m-auto">
-      <h1>hii</h1>
-      <ul>
-        <li v-for="message in messages">
-          {{message}}
-        </li>
-      </ul>
+  <div id="app"> 
+    <div v-if="auth" class="h-screen w-full grid grid-cols-12 overflow-hidden">
+      <div class="col-span-12 grid grid-rows-12 h-screen">
+        <MessageList class="row-span-5 bg-blue-100 overflow-y-auto p-4" />
+        <div class="row-span-1 bg-blue-100 flex items-end p-4">
+          <Compose />
+        </div>
+      </div>
+    </div>
+    <div v-else class="flex flex-col items-center h-screen">
+      <div class="m-auto">
+        <input type="text" ref="userInput" class="p-4 border">
+        <div>
+          <button class="bg-gray-100" v-on:click="login">done</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-  import Channel from './services/pusher'
+  import Store from './state/index'
+  import MessageList from './components/MessageList.vue'
+  import Compose from './components/Compose.vue'
 
   export default {
     data() {
       return {
-        channel: Channel,
-        messages: []
+        auth: false
       }
     },
-    mounted() {
-      var app = this; 
-      this.channel.bind('my-event', (data) => {
-        this.messages.push(JSON.stringify(data.message));
-      });      
-    }    
+    components: {MessageList, Compose},
+    created() {
+      let user = localStorage.getItem('user')
+      if (user) {
+        Store.updateUser(user)
+        this.auth = true
+      }
+    },
+    methods: {
+      login: function() {
+        Store.updateUser(this.$refs.userInput.value)
+        localStorage.setItem('user', this.$refs.userInput.value)
+        this.auth = true
+      }
+    }
   }
 </script>
 
