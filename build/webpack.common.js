@@ -6,16 +6,10 @@ const MiniCssExtracPlugin = require('mini-css-extract-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
 
 module.exports = {
-  mode: 'development',
   entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, '../dist'),
     filename: '[hash].bundle.js'
-  },
-  devServer: {
-    contentBase: path.resolve(__dirname, 'dist'),
-    clientLogLevel: 'silent',
-    hot: true
   },
   module: {
     rules: [
@@ -44,7 +38,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html'
+      template: 'src/index.html'
     }),
     new CleanWebpackPlugin(),
     new MiniCssExtracPlugin({
