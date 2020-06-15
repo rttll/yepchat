@@ -34,7 +34,6 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
-    "pusher": "^3.0.1",
     "pusher-js": "^6.0.3",
     "vue": "^2.6.11"
   }
