@@ -1,10 +1,13 @@
 <template>
 
   <div class="" ref="list">
-    <div v-for="(message, index) in list" :key="index" class="">
-      <div class="flex py-2" :class="message.fields.user === user ? 'justify-end' : 'justify-start' ">
-        <Message :message="message" class="" />
+    <div v-if="messages.length > 0">
+      <div v-for="(message, index) in list" :key="index" class="">
+        <div class="flex py-2" :class="message.fields.user === user ? 'justify-end' : 'justify-start' ">
+          <Message :message="message" class="" />
+        </div>
       </div>
+
     </div>
 
   </div>
@@ -35,9 +38,14 @@
       },
     },
     created() {
-      fetch('http://localhost:9000/index').then((data) => {
+      // const api = '/api/index';
+      const localAPI = 'http://localhost:9000/index';
+      const productionAPI = 'https://yepchat.herokuapp.com/index'
+      const api = window.location.hostname === 'localhost' ? localAPI : productionAPI
+      fetch(api).then((data) => {
         return data.json()
       }).then((messages) => {
+        debugger
         this.messages = messages
       }).catch((err) => {
         // TODO error for could not load messages
