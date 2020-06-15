@@ -12,8 +12,7 @@
   "scripts": {
     "watch": "webpack --watch --config ./build/webpack.dev.js",
     "serve": "webpack-dev-server --open --config ./build/webpack.dev.js",
-    "build": "rm -rf dist && mkdir dist && echo 'hiii' > dist/index.html",
-    "build2": "NODE_ENV=production webpack --config ./build/webpack.prod.js",
+    "build": "NODE_ENV=production webpack --config ./build/webpack.prod.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
