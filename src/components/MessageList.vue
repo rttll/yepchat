@@ -104,7 +104,7 @@
   }
 </script>
 
-<style scoped>
+<style>
   .list-enter-active, .list-leave-active {
     transition: all 1s;
   }

@@ -1,7 +1,7 @@
 <template>
-  <div id="foo" class="flex items-stretch w-full h-24 bg-white rounded-full outline-none py-4 px-8 resize-none">
+  <div class="flex items-center w-full h-24 bg-white rounded-full outline-none py-4 px-8 resize-none">
     <textarea     
-      class="w-full outline-none resize-none bg-transparent py-2 px-2"
+      class="w-full outline-none resize-none bg-transparent py-2 px-2 h-10"
       ref="input"
       @keydown="keyhandler"
       @keyup="keyhandler"
@@ -49,27 +49,23 @@
     mounted() {
       this.$nextTick(() => {
         this.$refs.input.focus()
+        // Dev: Create a bunch of texts from another user
+        // setInterval(() => {
+        //   axios.post(`${Store.state.api}/create`, {
+        //     body: 'hello worlds',
+        //     user: 'foo'
+        //   })
+        // }, 500);
       })
     }
   }
 </script>
 
 <style scoped>
-  textarea::-webkit-scrollbar-track
-  {
-      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-      background-color: #F5F5F5;
-  }
 
   textarea::-webkit-scrollbar
   {
       width: 6px;
-      background-color: #F5F5F5;
-  }
-
-  textarea::-webkit-scrollbar-thumb
-  {
-      background-color: #555;
   }
 
 </style>
