@@ -4,8 +4,8 @@
     <div v-if="messages.length > 0">
       <transition-group name="list" tag="div">
         <div v-for="(message, index) in list" :key="index">
-          <div class="flex py-2" :class="message.fields.user === user ? 'justify-end' : 'justify-start' ">
-            <Message :message="message" class="" />
+          <div class="flex py-2" :class="message.fields.user.name === user ? 'justify-end' : 'justify-start' ">
+            <Message :message="message" :user="user" class="" />
           </div>
         </div>
       </transition-group>

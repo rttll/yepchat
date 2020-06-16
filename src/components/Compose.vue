@@ -1,17 +1,22 @@
 <template>
-  <div class="flex items-center w-full h-24 bg-white rounded-full outline-none py-4 px-8 resize-none">
+  <div class="flex items-center shadow-lg w-full h-24 bg-white rounded-full outline-none py-4 px-8 resize-none">
+    <Avatar 
+      class="w-10 h-10"
+      :animal="animal" 
+    />
     <textarea     
-      class="w-full outline-none resize-none bg-transparent py-2 px-2 h-10"
+      class="w-full outline-none resize-none bg-transparent py-2 pr-2 pl-4 h-10"
       ref="input"
       @keydown="keyhandler"
       @keyup="keyhandler"
-      >
+    >
     </textarea>
   </div>
 </template>
 
 <script>
   import Store from '../state/index'
+  import Avatar from './Avatar.vue'
   const axios = require('axios').default;
   axios.defaults.headers.post['Content-Type'] = 'application/json';
 
@@ -20,6 +25,12 @@
     data() {
       return {
         meta: false
+      }
+    },
+    components: { Avatar },
+    computed: {
+      animal() {
+        return Store.state.animal
       }
     },
     methods: {
@@ -38,7 +49,10 @@
         try {
           var request = await axios.post(`${Store.state.api}/create`, {
             body: body,
-            user: Store.state.user
+            user: {
+              name: Store.state.user,
+              avatar: 'bear',
+            }
           })
           this.$refs.input.value = ''
         } catch (error) {
@@ -48,6 +62,7 @@
     },
     mounted() {
       this.$nextTick(() => {
+        localStorage.setItem('animal', 'fox')
         this.$refs.input.focus()
         // Dev: Create a bunch of texts from another user
         // setInterval(() => {

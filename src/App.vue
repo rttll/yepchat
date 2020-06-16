@@ -37,6 +37,10 @@
         Store.updateUser(user)
         this.auth = true
       }
+      let animal = localStorage.getItem('animal')
+      if (animal) {
+        Store.updateAnimal(animal)
+      }
     },
     methods: {
       login: function() {
