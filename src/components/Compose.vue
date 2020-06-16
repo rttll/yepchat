@@ -35,16 +35,11 @@
       send: async function(e) {
         var body = this.$refs.input.value;
         if (body.trim().length < 1) return false
-        // const api = '/api/create';
-        const localAPI = 'http://localhost:9000/create';
-        const productionAPI = 'https://yepchat.herokuapp.com/create'
-        const api = window.location.hostname === 'localhost' ? localAPI : productionAPI
         try {
-          var request = await axios.post(api, {
+          var request = await axios.post(`${Store.state.api}/create`, {
             body: body,
             user: Store.state.user
           })
-          debugger
           this.$refs.input.value = ''
         } catch (error) {
           console.log(error);
@@ -74,7 +69,7 @@
 
   textarea::-webkit-scrollbar-thumb
   {
-      background-color: #000000;
+      background-color: #555;
   }
 
 </style>
