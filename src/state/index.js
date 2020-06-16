@@ -4,6 +4,7 @@ const productionAPI = 'https://yepchat.herokuapp.com'
 var store = {
   state: {
     api: window.location.hostname === 'localhost' ? localAPI : productionAPI,
+    pusherAuthEndpoint: window.location.hostname === 'localhost' ? `${localAPI}/pusher/auth` : productionAPI,
     user: null,
     animal: null,
     socket: null

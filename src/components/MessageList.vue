@@ -48,13 +48,12 @@
       })
     },
     mounted() {
+
       PusherInstance.connection.bind('connected', () => {
         Store.updateSocket(PusherInstance.connection.socket_id)
       })
-
-      const chat = PusherInstance.subscribe('yepchat');
-      const typing = PusherInstance.subscribe('typing')     
       
+      var chat = PusherInstance.subscribe('private-yepchat');
       chat.bind('new-chat', (data) => {
         this.messages.push(data);
       });
