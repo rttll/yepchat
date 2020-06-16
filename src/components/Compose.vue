@@ -1,17 +1,22 @@
 <template>
-  <div id="foo" class="flex items-stretch w-full h-24 bg-white rounded-full outline-none py-4 px-8 resize-none">
+  <div class="flex items-center shadow-lg w-full h-24 bg-white rounded-full outline-none py-4 px-8 resize-none">
+    <Avatar 
+      class="w-10 h-10"
+      :animal="animal" 
+    />
     <textarea     
-      class="w-full outline-none resize-none bg-transparent py-2 px-2"
+      class="w-full outline-none resize-none bg-transparent py-2 pr-2 pl-4 h-10"
       ref="input"
       @keydown="keyhandler"
       @keyup="keyhandler"
-      >
+    >
     </textarea>
   </div>
 </template>
 
 <script>
   import Store from '../state/index'
+  import Avatar from './Avatar.vue'
   const axios = require('axios').default;
   axios.defaults.headers.post['Content-Type'] = 'application/json';
 
@@ -20,6 +25,12 @@
     data() {
       return {
         meta: false
+      }
+    },
+    components: { Avatar },
+    computed: {
+      animal() {
+        return Store.state.animal
       }
     },
     methods: {
@@ -35,16 +46,14 @@
       send: async function(e) {
         var body = this.$refs.input.value;
         if (body.trim().length < 1) return false
-        // const api = '/api/create';
-        const localAPI = 'http://localhost:9000/create';
-        const productionAPI = 'https://yepchat.herokuapp.com/create'
-        const api = window.location.hostname === 'localhost' ? localAPI : productionAPI
         try {
-          var request = await axios.post(api, {
+          var request = await axios.post(`${Store.state.api}/create`, {
             body: body,
-            user: Store.state.user
+            user: {
+              name: Store.state.user,
+              avatar: 'bear',
+            }
           })
-          debugger
           this.$refs.input.value = ''
         } catch (error) {
           console.log(error);
@@ -53,28 +62,25 @@
     },
     mounted() {
       this.$nextTick(() => {
+        localStorage.setItem('animal', 'fox')
         this.$refs.input.focus()
+        // Dev: Create a bunch of texts from another user
+        // setInterval(() => {
+        //   axios.post(`${Store.state.api}/create`, {
+        //     body: 'hello worlds',
+        //     user: 'foo'
+        //   })
+        // }, 500);
       })
     }
   }
 </script>
 
 <style scoped>
-  textarea::-webkit-scrollbar-track
-  {
-      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-      background-color: #F5F5F5;
-  }
 
   textarea::-webkit-scrollbar
   {
       width: 6px;
-      background-color: #F5F5F5;
-  }
-
-  textarea::-webkit-scrollbar-thumb
-  {
-      background-color: #000000;
   }
 
 </style>
