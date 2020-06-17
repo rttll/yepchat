@@ -49,10 +49,12 @@
     },
     created() {
       fetch(`${Store.state.api}/index`).then((data) => {
+        debugger
         return data.json()
       }).then((messages) => {
         this.messages = messages
       }).catch((err) => {
+        debugger
         // TODO error for could not load messages
         console.error(err)
       })
