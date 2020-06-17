@@ -17,6 +17,8 @@
 <script>
   import Store from '../state/index'
   import Avatar from './Avatar.vue'
+  import PusherInstance from '../services/pusher'
+  
   const axios = require('axios').default;
   axios.defaults.headers.post['Content-Type'] = 'application/json';
 
@@ -24,7 +26,12 @@
     name: 'Compose',
     data() {
       return {
-        meta: false
+        meta: false,
+        sending: false,
+        typing: false,
+        typingTimer: null,
+        userEventsSubscribed: null,
+        userEvents: null
       }
     },
     components: { Avatar },
@@ -37,10 +44,25 @@
       keyhandler: function(e) {
         // TODO: what about touch devices / no keyboard?
         var which = e.which;
-        if (which === 91) {
-          this.meta = e.type === 'keydown'
-        } else if ( which === 13 && ( this.meta ) ) {
+        if ( which === 13 && ( this.meta ) ) {
+          this.sending = true
           this.send()
+        } else { 
+          if (which === 91) {
+            this.meta = e.type === 'keydown'
+          } else if (!this.sending) {
+            if (!this.typing) {
+              var trigger = this.userEvents.trigger('client-typing', {user: Store.state.user})
+            }
+            this.typing = true
+            if (this.typingTimer !== null) clearInterval(this.typingTimer)
+            this.typingTimer = setInterval(() => {
+              clearInterval(this.typingTimer)
+              this.typing = false
+              var trigger = this.userEvents.trigger('client-typing', {user: false})
+            }, 1000);
+          }
+
         }
       },
       send: async function(e) {
@@ -54,6 +76,12 @@
               avatar: 'bear',
             }
           })
+          setTimeout(() => {
+            this.sending = false
+          }, 500);
+          if (this.typingTimer !== null) clearInterval(this.typingTimer)
+          this.typing = false
+          var trigger = this.userEvents.trigger('client-typing', {user: false})
           this.$refs.input.value = ''
         } catch (error) {
           console.log(error);
@@ -62,8 +90,21 @@
     },
     mounted() {
       this.$nextTick(() => {
-        localStorage.setItem('animal', 'fox')
         this.$refs.input.focus()
+        this.userEvents = PusherInstance.subscribe('private-userevents');
+        
+        // todo set anima for real on login
+        localStorage.setItem('animal', 'fox')
+      
+        PusherInstance.connection.bind('connected', () => {
+          Store.updateSocket(PusherInstance.connection.socket_id)
+        })
+      
+        this.userEvents.bind('pusher:subscription_succeeded', function() {
+          this.userEventsSubscribed = true
+        });
+
+
         // Dev: Create a bunch of texts from another user
         // setInterval(() => {
         //   axios.post(`${Store.state.api}/create`, {

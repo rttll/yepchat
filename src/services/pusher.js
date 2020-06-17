@@ -4,7 +4,6 @@ import Store from '../state/index'
 // Enable pusher logging - don't include this in production
 // Pusher.logToConsole = true;
 
-console.log(Store.state)
 var key = '830411361cc2b120c4ed'
 var pusher = new Pusher(key, {
   cluster: 'us3',
