@@ -3,13 +3,20 @@
   <div ref="list">
     <div v-if="messages.length > 0">
       <transition-group name="list" tag="div">
-        <div v-for="(message, index) in list" :key="index">
+        <div v-for="(message, index) in list" :key="index" class="z-20 relative">
           <div class="flex py-2" :class="message.fields.user.name === user ? 'justify-end' : 'justify-start' ">
             <Message :message="message" :user="user" class="" />
           </div>
         </div>
       </transition-group>
     </div>
+    <p v-if="typing" 
+      class="text-sm text-gray-500 fixed z-10" 
+      style="bottom: 125px; left: 50px">
+      <transition name="fade">
+        <span>{{ typing }} is typing  </span>
+      </transition>
+    </p>
   </div>
 
 </template>
@@ -25,7 +32,10 @@
     data() {
       return {
         messages: [],
-        initialScrollComplete: false
+        initialScrollComplete: false,
+        userEvents: false,
+        userEventsSubscribed: false,
+        typing: false,
       }
     },
     components: {Message},
@@ -46,18 +56,28 @@
         // TODO error for could not load messages
         console.error(err)
       })
-    },
-    mounted() {
-
+      
       PusherInstance.connection.bind('connected', () => {
         Store.updateSocket(PusherInstance.connection.socket_id)
       })
+    },
+    mounted() {
+      const chat = PusherInstance.subscribe('private-yepchat');
+      this.userEvents = PusherInstance.subscribe('private-userevents');
       
-      var chat = PusherInstance.subscribe('private-yepchat');
       chat.bind('new-chat', (data) => {
         this.messages.push(data);
       });
       
+      this.userEvents.bind('pusher:subscription_succeeded', function() {
+        this.userEventsSubscribed = true
+        console.log('subscribed to client-events')
+      });
+
+      this.userEvents.bind('client-typing', (data) => {
+        console.log(data.user)
+        this.typing = data.user
+      });
     },
     updated: function () {
       this.$nextTick(function () {
