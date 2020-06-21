@@ -1,21 +1,18 @@
 <template>
   <div>
-    <div v-html="avatar" class=""></div>
+    <div v-html="image" class=""></div>
   </div>
 </template>
 
 <script>
-  import Bear from '../images/bear.svg'
-  import Fox from '../images/fox.svg'
-  
   export default {
     name: 'Avatar',
     props: {
-      animal: String
+      avatar: String
     },
     computed: {
-      avatar() {
-        var svg = require(`!svg-inline-loader?classPrefix!../images/${this.animal}.svg`);
+      image() {
+        var svg = require(`!svg-inline-loader?classPrefix!../images/${this.avatar}.svg`);
         return svg
       }
     }

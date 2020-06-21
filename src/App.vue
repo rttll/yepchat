@@ -6,34 +6,16 @@
 
 <script>
   import Store from './state/index'
-  import Home from './views/Home.vue'
-  import Account from './views/Account.vue'
   
   export default {
-    data() {
-      return {
-        auth: false
-      }
-    },
-    components: {Home, Account},
+    name: 'App',
     created() {
-      let user = localStorage.getItem('user')
-      if (user) {
-        Store.updateUser(user)
-        this.auth = true
-      }
-      let animal = localStorage.getItem('animal')
-      if (animal) {
-        Store.updateAnimal(animal)
+      let config = JSON.parse(localStorage.getItem('yepchat'))
+      if (config) {
+        Store.updateUser(config.user)
+        Store.updateavatar(config.avatar)
       }
     },
-    methods: {
-      login: function() {
-        Store.updateUser(this.$refs.userInput.value)
-        localStorage.setItem('user', this.$refs.userInput.value)
-        this.auth = true
-      }
-    }
   }
 </script>
 

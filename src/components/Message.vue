@@ -5,7 +5,7 @@
       <Avatar   
         class="absolute w-6 h-6 p-1 box-content rounded-full bg-gray-100 border border-gray-200" 
         v-if="message.fields.user.name !== user"
-        :animal="message.fields.user.avatar"
+        :avatar="message.fields.user.avatar"
         style="top:-5px; left:-10px" />
 
       <div 

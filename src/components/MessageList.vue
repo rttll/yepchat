@@ -1,6 +1,6 @@
 <template>
 
-  <div ref="list">
+  <div ref="list" class="pt-4">
     <div v-if="messages.length > 0">
       <transition-group name="list" tag="div">
         <div v-for="(message, index) in list" :key="index" class="z-20 relative">
@@ -11,8 +11,8 @@
       </transition-group>
     </div>
     <p v-if="typing" 
-      class="text-sm text-gray-500 fixed z-10" 
-      style="bottom: 125px; left: 50px">
+      class="text-xs text-gray-500 fixed z-10" 
+      style="bottom: 116px; left: 50px">
       <transition name="fade">
         <span>{{ typing }} is typing  </span>
       </transition>
@@ -49,12 +49,10 @@
     },
     created() {
       fetch(`${Store.state.api}/index`).then((data) => {
-        debugger
         return data.json()
       }).then((messages) => {
         this.messages = messages
       }).catch((err) => {
-        debugger
         // TODO error for could not load messages
         console.error(err)
       })
