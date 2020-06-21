@@ -21,9 +21,13 @@ var store = {
     this.state.user = val
     setStorage('user', val)
   },
-  updateavatar (val) {
+  updateAvatar (val) {
     this.state.avatar = val
     setStorage('avatar', val)
+  },
+  initFromLocalStorage(val) {
+    var current = this.state
+    this.state = {...current, ...val}
   },
   updateSocket (val) {
     this.state.socket = val

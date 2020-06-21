@@ -69,7 +69,7 @@
             body: body,
             user: {
               name: Store.state.user,
-              avatar: Store.state.avatar
+              avatar: Store.state.avatar,
             }
           })
           setTimeout(() => {

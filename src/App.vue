@@ -12,8 +12,7 @@
     created() {
       let config = JSON.parse(localStorage.getItem('yepchat'))
       if (config) {
-        Store.updateUser(config.user)
-        Store.updateavatar(config.avatar)
+        Store.initFromLocalStorage(config)
       }
     },
   }

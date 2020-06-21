@@ -85,7 +85,7 @@
   import Store from '../state/index'
   const axios = require('axios').default;
   axios.defaults.headers.post['Content-Type'] = 'application/json';
-
+  
   export default {
     name: 'Account',
     data() {
@@ -119,8 +119,7 @@
           let request = await axios.post(`${Store.state.api}/login`, data)
           if (request.status === 200) {
             Store.updateUser(data.name)
-            Store.updateavatar(data.avatar)
-            // this.$router.push('/')
+            Store.updateAvatar(data.avatar)
           }
         } catch (error) {
           console.log(error)
@@ -130,7 +129,6 @@
         localStorage.removeItem('yepchat')
         this.name = null
         this.avatar = null
-        debugger
         this.$router.push('/bye')
       }
     },

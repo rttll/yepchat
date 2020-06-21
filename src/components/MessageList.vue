@@ -27,6 +27,9 @@
   import PusherInstance from '../services/pusher'
   import Message from './Message.vue'
 
+  const axios = require('axios').default;
+  axios.defaults.headers.post['Content-Type'] = 'application/json';
+
   export default {
     name: 'MessageList',
     data() {
@@ -48,8 +51,8 @@
       },
     },
     created() {
-      fetch(`${Store.state.api}/index`).then((data) => {
-        return data.json()
+      axios.get(`${Store.state.api}/index`).then((resp) => {
+        return resp.data
       }).then((messages) => {
         this.messages = messages
       }).catch((err) => {
