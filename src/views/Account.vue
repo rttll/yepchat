@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 flex items-baseline justify-center h-screen p-4 md:py-0">
+  <div class="bg-gray-100 flex items-center md:items-baseline justify-center h-screen p-4 md:py-0">
     <div class="fixed top-0 left-0 p-4 pt-2" v-if="!newAccount">
       <router-link to="/" class="text-lg"> &larr; Chat </router-link>
     </div>
