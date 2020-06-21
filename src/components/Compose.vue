@@ -1,11 +1,7 @@
 <template>
-  <div class="flex items-center shadow-lg w-full h-24 bg-white rounded-full outline-none py-4 px-8 resize-none">
-    <Avatar 
-      class="w-10 h-10"
-      :animal="animal" 
-    />
+  <div class="flex items-center shadow-lg w-full h-24 bg-white rounded-full outline-none px-8 mb-6">
     <textarea     
-      class="w-full outline-none resize-none bg-transparent py-2 pr-2 pl-4 h-10"
+      class="w-full outline-none resize-none bg-transparent py-2 px-2 h-10 text-sm text-gray-700"
       ref="input"
       @keydown="keyhandler"
       @keyup="keyhandler"
@@ -36,8 +32,8 @@
     },
     components: { Avatar },
     computed: {
-      animal() {
-        return Store.state.animal
+      avatar() {
+        return Store.state.avatar
       }
     },
     methods: {
@@ -73,7 +69,7 @@
             body: body,
             user: {
               name: Store.state.user,
-              avatar: 'bear',
+              avatar: Store.state.avatar,
             }
           })
           setTimeout(() => {
@@ -92,9 +88,6 @@
       this.$nextTick(() => {
         this.$refs.input.focus()
         this.userEvents = PusherInstance.subscribe('private-userevents');
-        
-        // todo set anima for real on login
-        localStorage.setItem('animal', 'fox')
       
         PusherInstance.connection.bind('connected', () => {
           Store.updateSocket(PusherInstance.connection.socket_id)
