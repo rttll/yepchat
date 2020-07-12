@@ -5,12 +5,14 @@ var store = {
   state: {
     api: window.location.hostname === 'localhost' ? localAPI : productionAPI,
     pusherAuthEndpoint: window.location.hostname === 'localhost' ? `${localAPI}/pusher/auth` : productionAPI,
+    user_id: null,
     user: null,
     avatar: null,
     socket: null
   },
-  updateUser (val) {
-    this.state.user = val
+  updateUser (id, name) {
+    this.state.user_id = id
+    this.state.user = name
   },
   updateAvatar (val) {
     this.state.avatar = val

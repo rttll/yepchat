@@ -128,13 +128,14 @@
       save: async function() {
         if (this.name == null || this.avatar === null) return false
         var data = {
+          user_id: `${this.name}-${Math.floor(Math.random() * 1000000)}`,
           name: this.name, 
           avatar: this.avatar
         }
         try {
           let request = await axios.post(`${Store.state.api}/login`, data)
           if (request.status === 200) {
-            Store.updateUser(data.name)
+            Store.updateUser(data.user_id, data.name)
             Store.updateAvatar(data.avatar)
             this.$router.push({name: 'Home'})
           }
