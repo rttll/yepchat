@@ -1,13 +1,5 @@
 <template>
-  <div class="bg-gray-100 flex items-center md:items-baseline justify-center h-screen p-4 md:py-0">
-    <div class="fixed top-0 left-0 p-4 pt-2" v-if="name">
-      <transition name="fade">
-        <router-link to="/" class="text-lg"> 
-          <span class="wigwag inline-block" :class="{active : saved}"> &larr; </span>
-          Chat 
-        </router-link>
-      </transition>
-    </div>
+  <div v-if="showMe" class="h-screen fixed inset-0 flex items-center md:items-baseline justify-center p-4 md:py-0">
     <div class="bg-white w-full max-w-md mx-auto shadow-xl md:mt-24 relative rounded">
       <div class="w-full w-full flex items-center justify-center relative -mt-16">
         <div class="w-32 h-32 p-4 rounded-full bg-gray-200 border border-white ">
@@ -118,8 +110,15 @@
     },
     components: {Avatar},
     computed: {
+      showMe() {
+        return this.$route.name === 'Account'
+      },
       getAvatar: function() {
-        return this.avatars[this.avatar]
+        if (this.avatar === null) {
+          return ""
+        } else {
+          return this.avatars[this.avatar]
+        }
       }
     },
     methods: {
@@ -137,8 +136,8 @@
           if (request.status === 200) {
             Store.updateUser(data.name)
             Store.updateAvatar(data.avatar)
+            this.$router.push({name: 'Home'})
           }
-          this.saved = true
         } catch (error) {
           console.log(error)
         }
@@ -148,16 +147,6 @@
         this.name = null
         this.avatar = null
         this.$router.push('/bye')
-      }
-    },
-    created() {
-      let name = Store.state.user;
-      let avatar = Store.state.avatar;
-      if (name) {
-        this.name = name
-      }
-      if (avatar) {
-        this.avatar = avatar
       }
     }
   }
