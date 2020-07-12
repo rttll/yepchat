@@ -8,13 +8,7 @@
   import Store from './state/index'
   
   export default {
-    name: 'App',
-    created() {
-      let config = JSON.parse(localStorage.getItem('yepchat'))
-      if (config) {
-        Store.initFromLocalStorage(config)
-      }
-    },
+    name: 'App'
   }
 </script>
 

@@ -6,7 +6,6 @@ Vue.use(VueRouter)
 
 import Home from './views/Home.vue'
 import Account from './views/Account.vue'
-import Bye from './views/Bye.vue'
 
 const router = new VueRouter({
   routes: [
@@ -18,22 +17,7 @@ const router = new VueRouter({
       name: 'Account',
       path: '/account', component: Account
     },
-    {
-      name: 'Bye',
-      path: '/bye', component: Bye
-    }
   ]
-})
-
-const hasAccount = () => {
-  // localStorage.removeItem('yepchat')
-  let config = JSON.parse(localStorage.getItem('yepchat'))
-  return config !== null && config.user !== null
-}
-
-router.beforeEach((to, from, next) => {
-  if (to.name !== 'Account' && to.name !== 'Bye' && !hasAccount()) next({ name: 'Account' })
-  else next()
 })
 
 import './app.css'
