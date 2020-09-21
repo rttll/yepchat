@@ -1,5 +1,6 @@
 const localAPI = 'http://localhost:9000';
-const productionAPI = 'https://yepchat.herokuapp.com'
+const productionAPI = 'https://yepchat-server.herokuapp.com'
+
 
 var store = {
   state: {
