@@ -1,10 +1,5 @@
 <template>
   <div id="home" class="bg-blue-100 "> 
-    <div class="fixed top-0 right-0 p-4 pt-2 text-gray-400">
-      <router-link to="/account" class="block">
-        <Avatar :avatar="avatar" class="h-6 w-6 p-1 bg-white hover:bg-pink-600 shadow-md rounded-full" />
-      </router-link>
-    </div>
     <div class="h-screen w-full grid grid-cols-12 overflow-hidden pt-6">
       <div class="col-span-12 grid grid-rows-12 h-screen">
         <MessageList class="row-span-5 bg-blue-100 overflow-y-auto p-4" />
