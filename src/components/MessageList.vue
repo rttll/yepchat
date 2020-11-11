@@ -66,14 +66,14 @@
       }
     },
     created() {
-      axios.get(`${Store.state.api}/index`).then((resp) => {
-        return resp.data
-      }).then((messages) => {
-        this.messages = messages
-      }).catch((err) => {
-        // TODO error for could not load messages
-        console.error(err)
-      })
+      // axios.get(`${Store.state.api}/index`).then((resp) => {
+      //   return resp.data
+      // }).then((messages) => {
+      //   this.messages = messages
+      // }).catch((err) => {
+      //   // TODO error for could not load messages
+      //   console.error(err)
+      // })
       
       PusherInstance.connection.bind('connected', () => {
         Store.updateSocket(PusherInstance.connection.socket_id)

@@ -132,16 +132,19 @@
           name: this.name, 
           avatar: this.avatar
         }
-        try {
-          let request = await axios.post(`${Store.state.api}/login`, data)
-          if (request.status === 200) {
-            Store.updateUser(data.user_id, data.name)
-            Store.updateAvatar(data.avatar)
-            this.$router.push({name: 'Home'})
-          }
-        } catch (error) {
-          console.log(error)
-        }
+        Store.updateUser(data.user_id, data.name)
+        Store.updateAvatar(data.avatar)
+        this.$router.push({name: 'Home'})
+        // try {
+        //   let request = await axios.post(`${Store.state.api}/login`, data)
+        //   if (request.status === 200) {
+        //     Store.updateUser(data.user_id, data.name)
+        //     Store.updateAvatar(data.avatar)
+        //     this.$router.push({name: 'Home'})
+        //   }
+        // } catch (error) {
+        //   console.log(error)
+        // }
       },
       destroy: function() {
         localStorage.removeItem('yepchat')
@@ -149,7 +152,7 @@
         this.avatar = null
         this.$router.push('/bye')
       }
-    }
+    },
   }
 </script>
 
