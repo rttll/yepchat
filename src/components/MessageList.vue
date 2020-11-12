@@ -135,47 +135,6 @@
         this.typing = data.user
       });
     },
-    updated: function () {
-      this.$nextTick(function () {
-        if (!this.initialScrollComplete) {
-          this.$refs.list.scrollTop = this.$refs.list.scrollHeight
-          this.initialScrollComplete = true;
-          return
-        }
-
-        const h = this.$refs.list.scrollHeight
-        const top = this.$refs.list.scrollTop
-        const dist = h - top;
-        
-        const easing = {
-          quad: function(timeFraction) {
-            return Math.pow(timeFraction, 2)
-          }
-        }
-
-        let start = performance.now(),
-            duration = 2000;
-        
-        const draw = (progress) => {
-          let percent = dist * progress;
-          let l = percent * 100 + top
-          this.$refs.list.scrollTop = l
-        }
-
-        function animate() {
-          let frac = (performance.now() - start) / duration;
-          if (frac > 1) frac = 1;
-
-          let progress = easing.quad(frac)
-          draw(progress)
-
-          if (frac < 1) requestAnimationFrame(animate)
-        }
-
-        animate()
-
-      })
-    },
   }
 </script>
 
