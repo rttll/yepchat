@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showMe" class="h-screen fixed inset-0 flex items-center md:items-baseline justify-center p-4 md:py-0">
+  <div v-if="showMe" class="bg-teal-400 h-screen fixed inset-0 flex items-center md:items-baseline justify-center p-4 md:py-0">
     <div class="bg-white w-full max-w-md mx-auto shadow-xl md:mt-24 relative rounded">
       <div class="w-full w-full flex items-center justify-center relative -mt-16">
         <div class="w-32 h-32 p-4 rounded-full bg-gray-200 border border-white ">
@@ -63,11 +63,11 @@
         </div>
 
       </div>
-      <div class="bg-gray-100 py-4 px-8 flex justify-end relative">
+      <div class="bg-gray-100 py-4 px-8 flex justify-end relative rounded">
         <button 
           v-on:click="save"
           class="button bg-white border shadow-md hover:shadow-sm">
-          Save
+          Enter
         </button>
         <div class="absolute left-0 right-0 px-8" v-if="saved">
           <transition name="fade">

@@ -1,9 +1,10 @@
 <template>
-  <div class="p-4 pt-1">
+  <div class="p-4 pt-1" v-on:click="focus">
     <div class="flex items-center shadow-lg w-full h-full bg-white rounded-full outline-none px-8 mb-6">
       <textarea     
         class="w-full outline-none resize-none bg-transparent py-2 px-2 h-10 text-sm text-gray-700"
         ref="input"
+        v-model="body"
         @keydown="keyhandler"
         @keyup="keyhandler"
       >
@@ -25,6 +26,7 @@
     data() {
       return {
         meta: false,
+        body: '',
         sending: false,
         typing: false,
         typingTimer: null,
@@ -39,6 +41,9 @@
       }
     },
     methods: {
+      focus() {
+        this.$refs.input.focus()
+      },
       keyhandler: function(e) {
         var which = e.which;
         if ( which === 13 && ( !this.meta ) ) {
@@ -63,11 +68,10 @@
         }
       },
       send: async function(e) {
-        var body = this.$refs.input.value;
-        if (body.trim().length < 1) return false
+        if (this.body.trim().length < 1) return false
         try {
           var request = await axios.post(`${Store.state.api}/create`, {
-            body: body,
+            body: this.body,
             user: {
               name: Store.state.user,
               avatar: Store.state.avatar,
@@ -79,7 +83,7 @@
           if (this.typingTimer !== null) clearInterval(this.typingTimer)
           this.typing = false
           var trigger = this.userEvents.trigger('client-typing', {user: false})
-          this.$refs.input.value = ''
+          this.body = ''
         } catch (error) {
           console.log(error);
         }
@@ -87,7 +91,7 @@
     },
     mounted() {
       this.$nextTick(() => {
-        this.$refs.input.focus()
+        this.focus()
         this.userEvents = PusherInstance.subscribe('private-userevents');
       
         PusherInstance.connection.bind('connected', () => {
