@@ -1,7 +1,8 @@
 <template>
   <div class="p-4 pt-1" v-on:click="focus">
     <div class="flex items-center shadow-lg w-full h-full bg-white rounded-full outline-none px-8 mb-6">
-      <textarea     
+      <textarea 
+        id="foo"    
         class="w-full outline-none resize-none bg-transparent py-2 px-2 h-10 text-sm text-gray-700"
         ref="input"
         v-model="body"
@@ -27,7 +28,7 @@
         meta: false,
         body: '',
         sending: false,
-        typing: false,
+        isTyping: false,
         typingTimer: null,
         userEventsSubscribed: null,
         userEvents: null
@@ -44,28 +45,37 @@
         this.$refs.input.focus()
       },
       keyhandler: function(e) {
-        var which = e.which;
-        if ( which === 13 && ( !this.meta ) ) { // Enter
-          e.preventDefault();
+        let which = e.which,
+            keydown = e.type === 'keydown',
+            keyup = e.type === 'keyup',
+            enterKey = which === 13,
+            shouldSend = enterKey && keyup// && this.meta;
+        
+        if (keydown && enterKey) e.preventDefault()
+        // this.body += "\n"
+
+        if (shouldSend) {
           this.sending = true
           this.send()
         } else { 
           if (which === 91) {
-            this.meta = e.type === 'keydown'
-          } else if (!this.sending) {
-            if (!this.typing) {
-              var trigger = this.userEvents.trigger('client-typing', {user: this.$store.state.user})
-            }
-            this.typing = true
-            if (this.typingTimer !== null) clearInterval(this.typingTimer)
-            this.typingTimer = setInterval(() => {
-              clearInterval(this.typingTimer)
-              this.typing = false
-              var trigger = this.userEvents.trigger('client-typing', {user: false})
-            }, 1000);
+            this.meta = keydown
           }
-
+          this.typing() 
         }
+      },
+      typing() {
+        if (this.sending) return false;
+        if (!this.isTyping) {
+          var trigger = this.userEvents.trigger('client-typing', {user: this.$store.state.user})
+        }
+        this.isTyping = true
+        if (this.typingTimer !== null) clearInterval(this.typingTimer)
+        this.typingTimer = setInterval(() => {
+          clearInterval(this.typingTimer)
+          this.isTyping = false
+          var trigger = this.userEvents.trigger('client-typing', {user: false})
+        }, 1000);
       },
       addMessage(data) {
         const message = {
@@ -86,13 +96,14 @@
           }
         }
         this.addMessage(message)
+        this.sending = false
         try {
           var request = await axios.post(`${this.$store.state.api}/create`, message)
           // setTimeout(() => {
           //   this.sending = false
           // }, 500);
           if (this.typingTimer !== null) clearInterval(this.typingTimer)
-          this.typing = false
+          this.isTyping = false
           var trigger = this.userEvents.trigger('client-typing', {user: false})
           this.body = ''
         } catch (error) {
