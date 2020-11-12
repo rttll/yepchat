@@ -46,7 +46,8 @@
       },
       keyhandler: function(e) {
         var which = e.which;
-        if ( which === 13 && ( !this.meta ) ) {
+        if ( which === 13 && ( !this.meta ) ) { // Enter
+          e.preventDefault();
           this.sending = true
           this.send()
         } else { 
@@ -67,19 +68,30 @@
 
         }
       },
+      addMessage(data) {
+        const message = {
+          fields: {
+            body: data.body,
+            user: data.user
+          }
+        }
+        Store.addMessage(message)
+      },
       send: async function(e) {
         if (this.body.trim().length < 1) return false
+        const message = {
+          body: this.body,
+          user: {
+            name: Store.state.user,
+            avatar: Store.state.avatar,
+          }
+        }
+        this.addMessage(message)
         try {
-          var request = await axios.post(`${Store.state.api}/create`, {
-            body: this.body,
-            user: {
-              name: Store.state.user,
-              avatar: Store.state.avatar,
-            }
-          })
-          setTimeout(() => {
-            this.sending = false
-          }, 500);
+          var request = await axios.post(`${Store.state.api}/create`, message)
+          // setTimeout(() => {
+          //   this.sending = false
+          // }, 500);
           if (this.typingTimer !== null) clearInterval(this.typingTimer)
           this.typing = false
           var trigger = this.userEvents.trigger('client-typing', {user: false})

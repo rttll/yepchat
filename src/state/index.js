@@ -14,7 +14,8 @@ var store = {
     user_id: null,
     user: null,
     avatar: null,
-    socket: null
+    socket: null,
+    messages: [],
   },
   updateUser (id, name) {
     this.state.user_id = id
@@ -25,6 +26,9 @@ var store = {
   },
   updateSocket (val) {
     this.state.socket = val
+  },
+  addMessage (data) {
+    this.state.messages.push(data)
   }
 }
 

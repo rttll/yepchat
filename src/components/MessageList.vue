@@ -2,7 +2,7 @@
 
   <div id="message-list" ref="list" class="pt-4 overflow-y-auto h-full">
     <transition-group name="list" tag="div" class="flex flex-col justify-end min-h-full">
-      <div v-for="(message, index) in list" :key="index" class="z-20 relative">
+      <div v-for="(message, index) in messages" :key="index" class="z-20 relative">
         <div v-if="message.notice" class="flex py-2 justify-start">
           <Notification :notice="message.notice" :avatar="message.avatar" class="" />
         </div> 
@@ -36,7 +36,6 @@
     name: 'MessageList',
     data() {
       return {
-        messages: [],
         initialScrollComplete: false,
         userEvents: false,
         userEventsSubscribed: false,
@@ -45,11 +44,11 @@
     },
     components: {Message, Notification},
     computed: {
+      messages() {
+        return Store.state.messages
+      },
       user() {
         return Store.state.user
-      },
-      list() {
-        return this.messages
       },
     },
     methods: {
@@ -61,6 +60,11 @@
           notice: `${member.info.name} ${action} the chat.`,
           avatar: member.info.avatar
         });
+      },
+      addMessage(data) {
+        console.log('new message')
+        if (data.fields.user.name === this.user) return false;
+        Store.addMessage(data);
       }
     },
     created() {
@@ -88,7 +92,7 @@
       this.userEvents = PusherInstance.subscribe('private-userevents');
       
       chat.bind('new-chat', (data) => {
-        this.messages.push(data);
+        this.addMessage(data)
       });
 
       presence.bind('pusher:subscription_succeeded', (members) => {
