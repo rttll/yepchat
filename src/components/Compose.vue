@@ -1,12 +1,14 @@
 <template>
-  <div class="flex items-center shadow-lg w-full h-24 bg-white rounded-full outline-none px-8 mb-6">
-    <textarea     
-      class="w-full outline-none resize-none bg-transparent py-2 px-2 h-10 text-sm text-gray-700"
-      ref="input"
-      @keydown="keyhandler"
-      @keyup="keyhandler"
-    >
-    </textarea>
+  <div class="p-4 pt-1">
+    <div class="flex items-center shadow-lg w-full h-full bg-white rounded-full outline-none px-8 mb-6">
+      <textarea     
+        class="w-full outline-none resize-none bg-transparent py-2 px-2 h-10 text-sm text-gray-700"
+        ref="input"
+        @keydown="keyhandler"
+        @keyup="keyhandler"
+      >
+      </textarea>
+    </div>
   </div>
 </template>
 

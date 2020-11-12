@@ -1,18 +1,16 @@
 <template>
 
-  <div ref="list" class="pt-4">
-    <div v-if="messages.length > 0">
-      <transition-group name="list" tag="div">
-        <div v-for="(message, index) in list" :key="index" class="z-20 relative">
-          <div v-if="message.notice" class="flex py-2 justify-start">
-            <Notification :notice="message.notice" :avatar="message.avatar" class="" />
-          </div> 
-          <div v-else class="flex py-2" :class="message.fields.user.name === user ? 'justify-end' : 'justify-start' ">
-            <Message :message="message" :user="user" class="" />
-          </div>
+  <div id="message-list" ref="list" class="pt-4 overflow-y-auto h-full">
+    <transition-group name="list" tag="div" class="flex flex-col justify-end min-h-full">
+      <div v-for="(message, index) in list" :key="index" class="z-20 relative">
+        <div v-if="message.notice" class="flex py-2 justify-start">
+          <Notification :notice="message.notice" :avatar="message.avatar" class="" />
+        </div> 
+        <div v-else class="flex py-2" :class="message.fields.user.name === user ? 'justify-end' : 'justify-start' ">
+          <Message :message="message" :user="user" class="" />
         </div>
-      </transition-group>
-    </div>
+      </div>
+    </transition-group>
     <p v-if="typing" 
       class="text-xs text-gray-500 fixed z-10" 
       style="bottom: 116px; left: 50px">
