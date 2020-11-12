@@ -1,7 +1,12 @@
 <template>
 
-  <div id="message-list" ref="list" class="pt-4 overflow-y-auto h-full">
-    <transition-group name="list" tag="div" class="flex flex-col justify-end min-h-full">
+  <div id="list-container" class="pt-4 overflow-hidden flex flex-col justify-end">
+    <transition-group 
+      ref="list" 
+      name="list" 
+      tag="div" 
+      class="overflow-y-auto"
+      >
       <div v-for="(message, index) in messages" :key="index" class="z-20 relative">
         <div v-if="message.notice" class="flex py-2 justify-start">
           <Notification :notice="message.notice" :avatar="message.avatar" class="" />
@@ -26,6 +31,7 @@
 <script>
   
   import PusherInstance from '../services/pusher'
+  import ScrollTop from '../services/scroll-top'
   import Message from './Message.vue'
   import Notification from './Notification.vue'
 
@@ -36,7 +42,6 @@
     name: 'MessageList',
     data() {
       return {
-        
         initialScrollComplete: false,
         userEvents: false,
         userEventsSubscribed: false,
@@ -67,6 +72,17 @@
         this.$store.dispatch('addMessage', {message: message})
       }
     },
+    updated: function () {
+      this.$nextTick(function () {
+        const el = this.$refs.list.$el
+        ScrollTop(el)
+        // if (!this.initialScrollComplete) {
+        // el.scrollTop = el.scrollHeight
+        // this.initialScrollComplete = true;
+        // return
+        // }
+      })
+    },    
     created() {
       // axios.get(`${this.$store.state.api}/index`).then((resp) => {
       //   return resp.data

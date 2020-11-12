@@ -1,9 +1,9 @@
 <template>
   <div id="home" class="bg-blue-100 "> 
-    <div class="h-screen w-full grid grid-cols-12 overflow-hidden">
-      <div class="col-span-12 grid grid-rows-6 h-screen">
-        <MessageList data-message-list class="row-span-5 bg-blue-100 px-4 py-1" />
-        <Compose class="row-span-1" />
+    <div class="h-screen w-full overflow-hidden">
+      <div class="h-screen flex flex-col justify-between">
+        <MessageList class="bg-blue-100 px-4 py-1 flex-grow" />
+        <Compose class="" />
       </div>
     </div>
   </div>
