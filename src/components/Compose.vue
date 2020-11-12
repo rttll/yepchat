@@ -40,9 +40,8 @@
     },
     methods: {
       keyhandler: function(e) {
-        // TODO: what about touch devices / no keyboard?
         var which = e.which;
-        if ( which === 13 && ( this.meta ) ) {
+        if ( which === 13 && ( !this.meta ) ) {
           this.sending = true
           this.send()
         } else { 
