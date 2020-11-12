@@ -11,6 +11,7 @@
         </div>
       </div>
     </transition-group>
+
     <p v-if="typing" 
       class="text-xs text-gray-500 fixed z-10" 
       style="bottom: 116px; left: 50px">
@@ -24,7 +25,6 @@
 
 <script>
   
-  import Store from '../state/index'
   import PusherInstance from '../services/pusher'
   import Message from './Message.vue'
   import Notification from './Notification.vue'
@@ -36,6 +36,7 @@
     name: 'MessageList',
     data() {
       return {
+        
         initialScrollComplete: false,
         userEvents: false,
         userEventsSubscribed: false,
@@ -45,10 +46,10 @@
     components: {Message, Notification},
     computed: {
       messages() {
-        return Store.state.messages
+        return this.$store.state.messages
       },
       user() {
-        return Store.state.user
+        return this.$store.state.user
       },
     },
     methods: {
@@ -61,14 +62,13 @@
           avatar: member.info.avatar
         });
       },
-      addMessage(data) {
-        console.log('new message')
-        if (data.fields.user.name === this.user) return false;
-        Store.addMessage(data);
+      addMessage(message) {
+        if (message.fields.user.name === this.user) return false;
+        this.$store.dispatch('addMessage', {message: message})
       }
     },
     created() {
-      // axios.get(`${Store.state.api}/index`).then((resp) => {
+      // axios.get(`${this.$store.state.api}/index`).then((resp) => {
       //   return resp.data
       // }).then((messages) => {
       //   this.messages = messages
@@ -78,14 +78,14 @@
       // })
       
       PusherInstance.connection.bind('connected', () => {
-        Store.updateSocket(PusherInstance.connection.socket_id)
+        this.$store.dispatch('updateSocket', {socket: PusherInstance.connection.socket_id})
       })
     },
     mounted() {
       PusherInstance.config.authEndpoint += 
-        `?username=${Store.state.user}
-        &user_id=${Store.state.user_id}
-        &avatar=${Store.state.avatar}`
+        `?username=${this.$store.state.user}
+        &user_id=${this.$store.state.user_id}
+        &avatar=${this.$store.state.avatar}`
 
       const chat = PusherInstance.subscribe('private-yepchat');
       const presence = PusherInstance.subscribe('presence-yepchat');
@@ -96,7 +96,7 @@
       });
 
       presence.bind('pusher:subscription_succeeded', (members) => {
-        this.presenceNotification({info: {name: 'You', avatar: Store.state.avatar}}, 'joined')
+        this.presenceNotification({info: {name: 'You', avatar: this.$store.state.avatar}}, 'joined')
         if (members.count > 1) {
           let names = () => {
             let n = []
@@ -104,7 +104,7 @@
               n.push([id, members.members[id].name])
             }
             return n
-              .filter(arr => arr[0] !== Store.state.user_id)
+              .filter(arr => arr[0] !== this.$store.state.user_id)
               .map(arr => arr[1])
           }
           let tobe = names().length > 1 ? 'are' : 'is'

@@ -5,16 +5,12 @@ import App from './App.vue'
 Vue.use(VueRouter)
 
 import './app.css'
-import Store from './state/index'
-import router from './routes'
+import store from './store/index'
+import router from './router'
 
-router.beforeEach((to, from, next) => {
-  if (to.name !== 'Account' && Store.state.user === null) next({name: 'Account'})
-  else next()
-})
-
-new Vue({
+const app = new Vue({
   el: '#app',
   router: router,
+  store: store,
   render: h => h(App)
 })

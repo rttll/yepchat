@@ -1,3 +1,11 @@
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+import actions from './actions'
+import mutations from './mutations';
+
+Vue.use(Vuex)
+
 const localAPI = 'http://localhost:9000';
 const productionAPI = 'https://yepchat-server.herokuapp.com'
 
@@ -7,7 +15,7 @@ const api = window.location.hostname === 'localhost' ? localAPI : productionAPI
 const pusherAuthEndpoint = window.location.hostname === 'localhost' ? `${localAPI}/pusher/auth` : `${productionAPI}/pusher/auth`
 // const pusherAuthEndpoint = `${productionAPI}/pusher/auth`
 
-var store = {
+const store = new Vuex.Store({
   state: {
     api: api, 
     pusherAuthEndpoint: pusherAuthEndpoint, 
@@ -17,19 +25,8 @@ var store = {
     socket: null,
     messages: [],
   },
-  updateUser (id, name) {
-    this.state.user_id = id
-    this.state.user = name
-  },
-  updateAvatar (val) {
-    this.state.avatar = val
-  },
-  updateSocket (val) {
-    this.state.socket = val
-  },
-  addMessage (data) {
-    this.state.messages.push(data)
-  }
-}
+  actions: actions,
+  mutations: mutations
+})
 
-module.exports = store
+export default store

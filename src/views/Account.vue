@@ -87,7 +87,6 @@
 
 <script>
   import Avatar from '../components/Avatar.vue'
-  import Store from '../state/index'
   const axios = require('axios').default;
   axios.defaults.headers.post['Content-Type'] = 'application/json';
   
@@ -132,11 +131,11 @@
           name: this.name, 
           avatar: this.avatar
         }
-        Store.updateUser(data.user_id, data.name)
-        Store.updateAvatar(data.avatar)
+        this.$store.dispatch('updateUser', {id: data.user_id, name: data.name})
+        this.$store.dispatch('updateAvatar', {avatar: data.avatar})
         this.$router.push({name: 'Home'})
         // try {
-        //   let request = await axios.post(`${Store.state.api}/login`, data)
+        //   let request = await axios.post(`${this.$store.state.api}/login`, data)
         //   if (request.status === 200) {
         //     Store.updateUser(data.user_id, data.name)
         //     Store.updateAvatar(data.avatar)

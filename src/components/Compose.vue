@@ -14,7 +14,6 @@
 </template>
 
 <script>
-  import Store from '../state/index'
   import Avatar from './Avatar.vue'
   import PusherInstance from '../services/pusher'
   
@@ -37,7 +36,7 @@
     components: { Avatar },
     computed: {
       avatar() {
-        return Store.state.avatar
+        return this.$store.state.avatar
       }
     },
     methods: {
@@ -55,7 +54,7 @@
             this.meta = e.type === 'keydown'
           } else if (!this.sending) {
             if (!this.typing) {
-              var trigger = this.userEvents.trigger('client-typing', {user: Store.state.user})
+              var trigger = this.userEvents.trigger('client-typing', {user: this.$store.state.user})
             }
             this.typing = true
             if (this.typingTimer !== null) clearInterval(this.typingTimer)
@@ -75,20 +74,20 @@
             user: data.user
           }
         }
-        Store.addMessage(message)
+        this.$store.dispatch('addMessage', {message: message})
       },
       send: async function(e) {
         if (this.body.trim().length < 1) return false
         const message = {
           body: this.body,
           user: {
-            name: Store.state.user,
-            avatar: Store.state.avatar,
+            name: this.$store.state.user,
+            avatar: this.$store.state.avatar,
           }
         }
         this.addMessage(message)
         try {
-          var request = await axios.post(`${Store.state.api}/create`, message)
+          var request = await axios.post(`${this.$store.state.api}/create`, message)
           // setTimeout(() => {
           //   this.sending = false
           // }, 500);
@@ -107,7 +106,7 @@
         this.userEvents = PusherInstance.subscribe('private-userevents');
       
         PusherInstance.connection.bind('connected', () => {
-          Store.updateSocket(PusherInstance.connection.socket_id)
+          this.$store.dispatch('updateSocket', {socket: PusherInstance.connection.socket_id})
         })
       
         this.userEvents.bind('pusher:subscription_succeeded', function() {
@@ -117,7 +116,7 @@
 
         // Dev: Create a bunch of texts from another user
         // setInterval(() => {
-        //   axios.post(`${Store.state.api}/create`, {
+        //   axios.post(`${this.$store.state.api}/create`, {
         //     body: 'hello worlds',
         //     user: 'foo'
         //   })

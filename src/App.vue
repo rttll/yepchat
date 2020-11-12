@@ -5,8 +5,6 @@
 </template>
 
 <script>
-  import Store from './state/index'
-  
   export default {
     name: 'App'
   }
