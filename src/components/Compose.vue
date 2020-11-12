@@ -1,8 +1,7 @@
 <template>
-  <div class="p-4 pt-1" v-on:click="focus">
-    <div class="flex items-center shadow-lg w-full h-full bg-white rounded-full outline-none px-8 mb-6">
+  <div class="p-4 pt-1 pb-2" v-on:click="focus">
+    <div class="flex items-center shadow-sm w-full h-full bg-white rounded-full outline-none px-8">
       <textarea 
-        id="foo"    
         class="w-full outline-none resize-none bg-transparent py-2 px-2 h-10 text-sm text-gray-700"
         ref="input"
         v-model="body"
@@ -88,8 +87,11 @@
       },
       send: async function(e) {
         if (this.body.trim().length < 1) return false
+        const body = this.body
+        this.body = ''
+
         const message = {
-          body: this.body,
+          body: body,
           user: {
             name: this.$store.state.user,
             avatar: this.$store.state.avatar,
@@ -105,7 +107,6 @@
           if (this.typingTimer !== null) clearInterval(this.typingTimer)
           this.isTyping = false
           var trigger = this.userEvents.trigger('client-typing', {user: false})
-          this.body = ''
         } catch (error) {
           console.log(error);
         }

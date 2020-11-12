@@ -76,11 +76,6 @@
       this.$nextTick(function () {
         const el = this.$refs.list.$el
         ScrollTop(el)
-        // if (!this.initialScrollComplete) {
-        // el.scrollTop = el.scrollHeight
-        // this.initialScrollComplete = true;
-        // return
-        // }
       })
     },    
     created() {

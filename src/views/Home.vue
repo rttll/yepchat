@@ -3,7 +3,7 @@
     <div class="h-screen w-full overflow-hidden">
       <div class="h-screen flex flex-col justify-between">
         <MessageList class="bg-blue-100 px-4 py-1 flex-grow" />
-        <Compose class="" />
+        <Compose class="flex-initial" />
       </div>
     </div>
   </div>
