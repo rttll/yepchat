@@ -1,14 +1,33 @@
 <template>
   <div class="p-4 pt-1 pb-2" v-on:click="focus">
-    <div class="flex items-center shadow-sm w-full h-full bg-white rounded-full outline-none px-8">
+    <div ref="input-container" :style=" `height: ${textareaContainerHeight}px` " class="relative flex flex-col shadow-sm w-full h-full outline-none">
+      <div class="p-4 z-0 left-0 top-0 fixed invisible w-full ">
+        <textarea ref="textareaClone" class="h-8 w-full">{{body}}</textarea>
+      </div>
+
+      <span class="block relative z-0 transform translate-y-2 rounded-tl-full rounded-tr-full bg-white w-full" :style=" `height: ${offset}px` ">&nbsp;</span>
       <textarea 
-        class="w-full outline-none resize-none bg-transparent py-2 px-2 h-10 text-sm text-gray-700"
+        class="bg-transparent relative z-10 w-full h-full overflow-hidden outline-none resize-none px-4 text-sm text-gray-700"
         ref="input"
         v-model="body"
         @keydown="keyhandler"
         @keyup="keyhandler"
       >
       </textarea>
+      <div class="absolute z-0 left-0 top-0 w-full h-full" :style=" `padding: ${offset}px 0` ">
+        <div class="bg-white h-full flex"></div>
+      </div>
+      <span class="block relative z-0 transform -translate-y-2 rounded-bl-full rounded-br-full bg-white w-full" :style=" `height: ${offset}px` ">&nbsp;</span>
+
+      <div class="absolute right-0 bottom-0 p-4 pr-2 z-30">
+        <div class="relative">
+          <transition name="slide-fade">
+            <span class="text-xs" v-if="showSendHelp">&#8984; + Enter</span>
+          </transition>
+          <button @click="send" @mouseenter="mouseEnterSendButton" @mouseleave="showSendHelp = false" class="h-6 w-6 transition-all hover:bg-gray-100 rounded-full relative z-20">&#8679;</button>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
@@ -30,29 +49,38 @@
         isTyping: false,
         typingTimer: null,
         userEventsSubscribed: null,
-        userEvents: null
+        userEvents: null,
+        textareaContainerHeight: '',
+        offset: 18,
+        showSendHelp: false,
       }
     },
     components: { Avatar },
     computed: {
       avatar() {
         return this.$store.state.avatar
-      }
+      },
     },
     methods: {
       focus() {
         this.$refs.input.focus()
       },
+      setContainerHeight() {
+        this.textareaContainerHeight = this.$refs.textareaClone.scrollHeight + 2 * this.offset
+      },
+      mouseEnterSendButton() {
+        const touch = matchMedia('(hover: none)').matches;
+        if (!touch) this.showSendHelp = true
+      },
       keyhandler: function(e) {
+        this.setContainerHeight()
+
         let which = e.which,
             keydown = e.type === 'keydown',
             keyup = e.type === 'keyup',
             enterKey = which === 13,
-            shouldSend = enterKey && keyup// && this.meta;
+            shouldSend = enterKey && this.meta;
         
-        if (keydown && enterKey) e.preventDefault()
-        // this.body += "\n"
-
         if (shouldSend) {
           this.sending = true
           this.send()
@@ -89,6 +117,7 @@
         if (this.body.trim().length < 1) return false
         const body = this.body
         this.body = ''
+        this.setContainerHeight()
 
         const message = {
           body: body,
@@ -115,6 +144,7 @@
     mounted() {
       this.$nextTick(() => {
         this.focus()
+        this.setContainerHeight()
         this.userEvents = PusherInstance.subscribe('private-userevents');
       
         PusherInstance.connection.bind('connected', () => {
@@ -139,10 +169,20 @@
 </script>
 
 <style scoped>
+ 
+.slide-fade-enter-active, .slide-fade-leave-active {
+  transition: all .3s ease;
+}
 
-  textarea::-webkit-scrollbar
-  {
-      width: 6px;
-  }
+.slide-fade-enter, .slide-fade-leave-to {
+  /* transform: translateX(-10px); */
+  opacity: 0;
+}
+
+.slide-fade-enter-to, .slide-fade-leave {
+  transform: translateX(-10px);
+  /* opacity: 0; */
+}
+
 
 </style>
