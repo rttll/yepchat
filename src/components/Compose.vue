@@ -1,15 +1,15 @@
 <template>
   <div class="p-4 pt-1 pb-2" v-on:click="focus">
-    <div ref="input-container" :style=" `height: ${textareaContainerHeight}px` " class="relative flex flex-col shadow-sm w-full h-full outline-none">
-      <div class="p-4 z-50 left-0 top-0 fixed invisible w-full ">
-        <textarea ref="textareaClone" class="h-8 w-full">{{body}}</textarea>
-      </div>
+    <div class="relative flex flex-col shadow-sm w-full h-full outline-none">
 
       <span class="block relative z-0 transform translate-y-2 rounded-tl-full rounded-tr-full bg-white w-full" :style=" `height: ${offset}px` ">&nbsp;</span>
       <textarea 
-        class="bg-transparent relative z-10 w-full h-full overflow-hidden outline-none resize-none px-4 text-sm text-gray-700"
-        ref="input"
+        ref="textarea"
+        class="bg-transparent relative z-10 w-full overflow-hidden outline-none resize-none px-4 text-sm text-gray-700"
         v-model="body"
+        :style="style"
+        style="min-height:1px"
+        @input="setStyle"
         @keydown="keyhandler"
         @keyup="keyhandler"
       >
@@ -50,7 +50,7 @@
         typingTimer: null,
         userEventsSubscribed: null,
         userEvents: null,
-        textareaContainerHeight: '',
+        style: '',
         offset: 18,
         showSendHelp: false,
       }
@@ -63,17 +63,22 @@
     },
     methods: {
       focus() {
-        this.$refs.input.focus()
+        this.$refs.textarea.focus()
       },
-      setContainerHeight() {
-        this.textareaContainerHeight = this.$refs.textareaClone.scrollHeight + 2 * this.offset
+      setStyle() {
+        const el = this.$refs.textarea
+        if ( this.body.length < 1 || el.scrollHeight < 32 ) {
+          el.style.height = '1rem'
+          return
+        }
+        el.style.height = 'auto'
+        el.style.height = el.scrollHeight + 'px'
       },
       mouseEnterSendButton() {
         const touch = matchMedia('(hover: none)').matches;
         if (!touch) this.showSendHelp = true
       },
       keyhandler: function(e) {
-        this.setContainerHeight()
       
         let which = e.which,
             keydown = e.type === 'keydown',
@@ -117,7 +122,7 @@
         if (this.body.trim().length < 1) return false
         const body = this.body
         this.body = ''
-        this.setContainerHeight()
+        this.setStyle()
 
         const message = {
           body: body,
@@ -144,7 +149,8 @@
     mounted() {
       this.$nextTick(() => {
         this.focus()
-        this.setContainerHeight()
+        window.addEventListener('focus', this.focus() )
+        this.setStyle()
         this.userEvents = PusherInstance.subscribe('private-userevents');
       
         PusherInstance.connection.bind('connected', () => {
