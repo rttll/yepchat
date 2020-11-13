@@ -8,8 +8,8 @@
       class="overflow-y-auto"
       >
       <div v-for="(message, index) in messages" :key="index" class="z-20 relative">
-        <div v-if="message.notice" class="flex py-2 justify-start">
-          <Notification :notice="message.notice" :avatar="message.avatar" class="" />
+        <div v-if="message.notice" class="py-2">
+          <Notification :notice="message.notice" />
         </div> 
         <div v-else class="flex py-2" :class="message.fields.user.name === user ? 'justify-end' : 'justify-start' ">
           <Message :message="message" :user="user" class="" />

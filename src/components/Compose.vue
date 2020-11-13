@@ -1,7 +1,7 @@
 <template>
   <div class="p-4 pt-1 pb-2" v-on:click="focus">
     <div ref="input-container" :style=" `height: ${textareaContainerHeight}px` " class="relative flex flex-col shadow-sm w-full h-full outline-none">
-      <div class="p-4 z-0 left-0 top-0 fixed invisible w-full ">
+      <div class="p-4 z-50 left-0 top-0 fixed invisible w-full ">
         <textarea ref="textareaClone" class="h-8 w-full">{{body}}</textarea>
       </div>
 
@@ -74,7 +74,7 @@
       },
       keyhandler: function(e) {
         this.setContainerHeight()
-
+      
         let which = e.which,
             keydown = e.type === 'keydown',
             keyup = e.type === 'keyup',
