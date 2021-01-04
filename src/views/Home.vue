@@ -1,18 +1,17 @@
 <template>
-  <div id="home" class="bg-blue-100 "> 
-    <div class="h-screen w-full grid grid-cols-12 overflow-hidden pt-6">
-      <div class="col-span-12 grid grid-rows-12 h-screen">
-        <MessageList class="row-span-5 bg-blue-100 overflow-y-auto p-4" />
-        <div class="row-span-1 p-4 pt-6">
-          <Compose />
-        </div>
+  <div id="home" class=""> 
+    <div class="relative flex flex-col w-full h-screen border-t border-b border-red-600">
+      <MessageList v-if="page === 'Home' " class="flex-grow" />
+      
+      <div class="p-2">
+        <router-link to="/new" class="relative block h-8 bg-white rounded-full"></router-link>
       </div>
+      
     </div>
   </div>
 </template>
 
 <script>
-  import Store from '../state/index'
   import MessageList from '../components/MessageList.vue'
   import Compose from '../components/Compose.vue'
   import Avatar from '../components/Avatar.vue'
@@ -21,14 +20,16 @@
     name: 'Home',
     data() {
       return {
-        avatar: Store.state.avatar
+        avatar: this.$store.state.avatar,
+        page: this.$route.name
       }
     },
     components: {MessageList, Compose, Avatar},
     methods: {
       login: function() {
-        Store.updateUser(this.$refs.userInput.value)
-        localStorage.setItem('user', this.$refs.userInput.value)
+        // Store.updateUser(this.$refs.userInput.value)
+        // this.$store.dispatch('updateUser', {id: data.user_id, name: data.name})
+        // localStorage.setItem('user', this.$refs.userInput.value)
       }
     }
   }
