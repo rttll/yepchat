@@ -1,13 +1,13 @@
 <template>
 
-  <div id="list-container" class="pt-4 overflow-hidden flex flex-col justify-end">
+  <div id="list-container" class="flex flex-col justify-end h-screen pt-4 overflow-hidden">
     <transition-group 
       ref="list" 
       name="list" 
       tag="div" 
       class="overflow-y-auto"
       >
-      <div v-for="(message, index) in messages" :key="index" class="z-20 relative">
+      <div v-for="(message, index) in messages" :key="index" class="relative z-20">
         <div v-if="message.notice" class="py-2">
           <Notification :notice="message.notice" />
         </div> 
@@ -18,7 +18,7 @@
     </transition-group>
 
     <p v-if="typing" 
-      class="text-xs text-gray-500 fixed z-10" 
+      class="fixed z-10 text-xs text-gray-500" 
       style="bottom: 116px; left: 50px">
       <transition name="fade">
         <span>{{ typing }} is typing  </span>

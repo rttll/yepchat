@@ -1,34 +1,35 @@
 <template>
-  <div class="p-4 pt-1 pb-2" v-on:click="focus">
-    <div class="relative flex flex-col shadow-sm w-full h-full outline-none">
-
-      <span class="block relative z-0 transform translate-y-2 rounded-tl-full rounded-tr-full bg-white w-full" :style=" `height: ${offset}px` ">&nbsp;</span>
+  <div class="relative flex flex-col h-screen p-4" v-on:click="focus">
+      <div class="flex justify-between px-4 py-1">
+        <p>New Message</p>
+        <router-link to="/" class="">X</router-link>
+      </div>
       <textarea 
         ref="textarea"
-        class="bg-transparent relative z-10 w-full overflow-hidden outline-none resize-none px-4 text-sm text-gray-700"
+        class="relative z-10 flex-grow-0 w-full p-4 overflow-hidden text-sm text-gray-700 bg-white rounded-lg shadow-sm outline-none resize-none"
         v-model="body"
-        :style="style"
         style="min-height:1px"
-        @input="setStyle"
         @keydown="keyhandler"
         @keyup="keyhandler"
       >
       </textarea>
-      <div class="absolute z-0 left-0 top-0 w-full h-full" :style=" `padding: ${offset}px 0` ">
-        <div class="bg-white h-full flex"></div>
-      </div>
-      <span class="block relative z-0 transform -translate-y-2 rounded-bl-full rounded-br-full bg-white w-full" :style=" `height: ${offset}px` ">&nbsp;</span>
 
-      <div class="absolute right-0 bottom-0 p-4 pr-2 z-30">
+      <div class="flex justify-end p-4 pr-2">
         <div class="relative">
           <transition name="slide-fade">
             <span class="text-xs" v-if="showSendHelp">&#8984; + Enter</span>
           </transition>
-          <button @click="send" @mouseenter="mouseEnterSendButton" @mouseleave="showSendHelp = false" class="h-6 w-6 transition-all hover:bg-gray-100 rounded-full relative z-20">&#8679;</button>
+          <button 
+            @click="send" 
+            @mouseenter="mouseEnterSendButton" 
+            @mouseleave="showSendHelp = false" 
+            class="relative z-20 w-6 h-6 transition-all rounded-full hover:bg-gray-100">
+              <i class="fas fa-paper-plane"></i>
+            <!-- &#8679; -->
+          </button>
         </div>
       </div>
 
-    </div>
   </div>
 </template>
 
@@ -44,6 +45,7 @@
     data() {
       return {
         meta: false,
+        isFocused: true,
         body: '',
         sending: false,
         isTyping: false,
@@ -65,14 +67,11 @@
       focus() {
         this.$refs.textarea.focus()
       },
-      setStyle() {
-        const el = this.$refs.textarea
-        if ( this.body.length < 1 || el.scrollHeight < 32 ) {
-          el.style.height = '1rem'
-          return
-        }
-        el.style.height = 'auto'
-        el.style.height = el.scrollHeight + 'px'
+      onFocusHandler() {
+
+      },
+      onBlueHandler() {
+
       },
       mouseEnterSendButton() {
         const touch = matchMedia('(hover: none)').matches;
@@ -122,7 +121,6 @@
         if (this.body.trim().length < 1) return false
         const body = this.body
         this.body = ''
-        this.setStyle()
 
         const message = {
           body: body,
@@ -141,6 +139,7 @@
           if (this.typingTimer !== null) clearInterval(this.typingTimer)
           this.isTyping = false
           var trigger = this.userEvents.trigger('client-typing', {user: false})
+          this.$router.push('/')
         } catch (error) {
           console.log(error);
         }
@@ -150,7 +149,6 @@
       this.$nextTick(() => {
         this.focus()
         window.addEventListener('focus', this.focus() )
-        this.setStyle()
         this.userEvents = PusherInstance.subscribe('private-userevents');
       
         PusherInstance.connection.bind('connected', () => {

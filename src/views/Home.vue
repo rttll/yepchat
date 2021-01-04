@@ -1,10 +1,12 @@
 <template>
-  <div id="home" class="bg-blue-100 "> 
-    <div class="h-screen w-full overflow-hidden">
-      <div class="h-screen flex flex-col justify-between">
-        <MessageList class="bg-blue-100 px-4 py-1 flex-grow" />
-        <Compose class="flex-initial" />
+  <div id="home" class=""> 
+    <div class="relative flex flex-col w-full h-screen border-t border-b border-red-600">
+      <MessageList v-if="page === 'Home' " class="flex-grow" />
+      
+      <div class="p-2">
+        <router-link to="/new" class="relative block h-8 bg-white rounded-full"></router-link>
       </div>
+      
     </div>
   </div>
 </template>
@@ -18,13 +20,13 @@
     name: 'Home',
     data() {
       return {
-        avatar: this.$store.state.avatar
+        avatar: this.$store.state.avatar,
+        page: this.$route.name
       }
     },
     components: {MessageList, Compose, Avatar},
     methods: {
       login: function() {
-        debugger
         // Store.updateUser(this.$refs.userInput.value)
         // this.$store.dispatch('updateUser', {id: data.user_id, name: data.name})
         // localStorage.setItem('user', this.$refs.userInput.value)

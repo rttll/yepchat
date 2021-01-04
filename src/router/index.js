@@ -13,6 +13,11 @@ const router = new VueRouter({
       meta: { auth: true }
     },
     {
+      name: 'New',
+      path: '/new',
+      component: () => import('../views/NewMessage.vue') 
+    },
+    {
       name: 'Account',
       path: '/account', 
       component: Account
